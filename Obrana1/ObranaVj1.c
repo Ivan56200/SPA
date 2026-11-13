@@ -184,6 +184,68 @@ char** podijeli(char* str) {
 
 
 
+
+
+//Napisati funkciju koja iz stringa izdvaja drugu riječ u novi string i vraća je.
+//OBAVEZNO koristejne funkcija sa Prve Vj
+
+//Duljina stringa
+int mystrlen(char* str) {
+	int i;
+	for (i = 0; str[i] != '\0'; i++) {}
+	return i;
+}
+
+//kopiraj drugi u prvi string
+void mystrcpy(char* str1, char* str2) {
+	int i = 0;
+	for (i = 0; str2[i] != '\0'; i++) {
+		str1[i] = str2[i];
+	}
+	str1[i] = '\0';
+}
+
+
+char* noviStringVjezbe(char* str) {
+	int brojac = 0;
+	int pocetak = 0;
+
+	if (isalpha(str[0]))
+		brojac = 1;
+
+	for (int i = 0; str[i] != '\0'; i++) {
+		if (str[i] == ' ' && isalpha(str[i + 1])) {
+			brojac++;
+			if (brojac == 2) {
+				pocetak = i + 1;
+				break;
+			}
+		}
+	}
+
+	// duljina od početka druge riječi do kraja stringa
+	int duljina = mystrlen(&str[pocetak]);
+
+	char* novi = malloc((duljina + 1) * sizeof(char));
+
+	// kopiraj ostatak stringa
+	mystrcpy(novi, &str[pocetak]);
+
+	// prekini string na prvom razmaku
+	for (int i = 0; novi[i] != '\0'; i++) {
+		if (novi[i] == ' ') {
+			novi[i] = '\0';
+			break;
+		}
+	}
+
+	return novi;
+}
+
+
+
+
+
 int main() {
 	char str[] = "Prva druga trecva cetvrta";
 
@@ -199,9 +261,9 @@ int main() {
 	//printf("%s", novi);
 	//free(novi);
 
-	char* novi = noviString4(str);
-	printf("%s", novi);
-	free(novi);
+	//char* novi = noviString4(str);
+	//printf("%s", novi);
+	//free(novi);
 
 
 
@@ -212,6 +274,15 @@ int main() {
 	free(novi[0]);
 	free(novi[1]);
 	free(novi);*/
+
+
+
+	
+	char* novi = noviStringVjezbe(str);
+	printf("%s", novi);
+	free(novi);
+
+
 
 	return 0;
 }
