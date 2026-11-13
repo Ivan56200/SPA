@@ -1,59 +1,56 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//Napisati funkciju koja prima dva niza brojeva, spaja ih u novi niz i vraća ga
+//vraca novi niz struktura gdje ce na kraju se dodati nova struktura sa (0, 0)
+typedef struct {
+	float x, y;
+} Tocka;
 
-int* noviNiz1(int niz1[], int niz2[], int duljina1, int duljina2) {
-	int* novi = malloc((duljina1 + duljina2) * sizeof(int));
-
-	for (int i = 0; i < duljina1; i++) {
-		novi[i] = niz1[i];
+Tocka* dodaj(Tocka* niz, int n) {
+	Tocka* novi = malloc(sizeof(Tocka) * (n + 1));
+	int i;
+	for (i = 0; i < n; i++) {
+		novi[i].x = niz[i].x;
+		novi[i].y = niz[i].y;
 	}
 
-	int j = 0;
-	for (int i = duljina1; i < duljina1 + duljina2; i++) {
-		novi[i] = niz2[j];
-		j++;
+	novi[i].x = 0;
+	novi[i].y = 0;
+	return novi;
+}
+
+
+//Izbrisi  srednji clan
+Tocka* izbrisi(Tocka* t, int n, int* vel) {
+	int nova = n - 1;
+	*vel = nova;
+
+	Tocka* novi = malloc(nova * sizeof(Tocka));
+	int k = 0;
+
+	for (int i = 0; i < n; i++) {
+		if (i == n / 2)	continue;
+		novi[k].x = t[i].x;
+		novi[k].y = t[i].y;
+		k++;
 	}
 
 	return novi;
 }
 
-//Napisati funkciju koja prima niz, u novi niz kopira sve neparne elemente i vraća ga.
-int* noviNiz2(int niz[], int duljina, int* n) {
-	*n = 0;
-
-	for (int i = 0; i < duljina; i++) {
-		if (niz[i] % 2 != 0) (*n)++;
-	}
-
-	int* novi = malloc((*n) * sizeof(int));
-
-	int j = 0;
-	for (int i = 0; i < duljina; i++) {
-		if (niz[i] % 2 != 0) {
-			novi[j] = niz[i];
-			j++;
-		}
-	}
-	return novi;
-}
 
 int main() {
-	int niz1[] = { 1, 2, 3, 4 };
-	int niz2[] = { 6, 7, 8, 9 };
+	Tocka niz[] = { { 1.0, 2.0 }, { 2.0, 2.0 }, { 3.0, 2.0 }, { 3.0, 2.0 }, { 1.0, 2.0 } };
+	int duljina = sizeof(niz) / sizeof(niz[0]);
 
-	int duljina1 = sizeof(niz1) / sizeof(niz1[0]);
-	int duljina2 = sizeof(niz2) / sizeof(niz2[0]);
-
-	//int* novi = noviNiz1(niz1, niz2, duljina1, duljina2);
-	//for (int i = 0; i < duljina1 + duljina2; i++) printf("%d ", novi[i]);
-	//free(novi);
-
-	int duljinaN;
-	int* novi = noviNiz2(niz1, duljina1, &duljinaN);
-	for (int i = 0; i < duljinaN; i++) printf("%d ", novi[i]);
+	Tocka* novi = dodaj(niz, duljina);
+	for (int i = 0; i < duljina + 1; i++) printf("(%.1f, %.1f)\n", novi[i].x, novi[i].y);
 	free(novi);
+
+	//int duljinaN;
+	//Tocka* novi = izbrisi(niz, duljina, &duljinaN);
+	//for (int i = 0; i < duljinaN;i++) printf("(%.1f, %.1f)\n", novi[i].x, novi[i].y);
+	//free(novi);
 
 	return 0;
 }

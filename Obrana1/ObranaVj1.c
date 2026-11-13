@@ -101,6 +101,51 @@ char* noviString3(char* str) {
 }
 
 
+//Napisati funkciju koja iz stringa izdvaja sve osim sredjne riječ u novi string i vraća je.
+char* noviString4(char* str) {
+	int pocetak = 0;
+	int brRijeci = 0;
+	int duljinaCijelog = 0;
+
+	//broji sve rijeci
+	if (isalpha(str[0])) brRijeci = 1;
+	for (int i = 0; str[i] != '\0'; i++) {
+		if (str[i] == ' ' && isalpha(str[i + 1])) brRijeci++;
+		duljinaCijelog++;
+	}
+
+	int srednja = (brRijeci + 1) / 2;
+	brRijeci = 0;
+
+	//trazi gdje pocinje sredanj
+	if (isalpha(str[0])) brRijeci = 1;
+	for (int i = 0; str[i] != '\0'; i++) {
+		if (str[i] == ' ' && isalpha(str[i + 1]))brRijeci++;
+		if (brRijeci == srednja) {
+			pocetak = i + 1;
+			break;
+		}
+	}
+
+	//koliko je duga srrednja
+	int duljinaRijec = 0;
+	for (int i = pocetak; str[i] != '\0' && str[i] != ' '; i++) {
+		duljinaRijec++;
+	}
+
+	char* novi = malloc((duljinaCijelog - duljinaRijec) * sizeof(char) + 1);
+	int j = 0;
+	for (int i = 0; str[i] != '\0'; i++) {
+		if (i >= pocetak && i <= pocetak + duljinaRijec) continue;
+		novi[j] = str[i];
+		j++;
+	}
+	novi[j] = '\0';
+
+	return novi;
+
+}
+
 //Napisati funkciju koja prima string sa dvije riječi i vraća niz od dva nova stringa sa svakom riječi posebno
 //NAPISA CHAT RePeTe
 char** podijeli(char* str) {
@@ -139,52 +184,8 @@ char** podijeli(char* str) {
 
 
 
-
-///// STRUKTURE /////
-
-
-
-
-//vraca novi niz struktura gdje ce na kraju se dodati nova struktura sa (0, 0)
-typedef struct {
-	float x, y;
-} Tocka;
-
-Tocka* dodaj(Tocka* niz, int n) {
-	Tocka* novi = malloc(sizeof(Tocka) * (n + 1));
-	int i;
-	for (i = 0; i < n; i++) {
-		novi[i].x = niz[i].x;
-		novi[i].y = niz[i].y;
-	}
-
-	novi[i].x = 0;
-	novi[i].y = 0;
-	return novi;
-}
-
-
-//Izbrisi  srednji clan
-Tocka* izbrisi(Tocka* t, int n, int* vel) {
-	int nova = n - 1;
-	*vel = nova;
-
-	Tocka* novi = malloc(nova * sizeof(Tocka));
-	int k = 0;
-
-	for (int i = 0; i < n; i++) {
-			if (i == n / 2)	continue;
-			novi[k].x = t[i].x;
-			novi[k].y = t[i].y;
-			k++;
-		}
-	
-	return novi;
-}
-
-
 int main() {
-	char str[] = "Prva druga";
+	char str[] = "Prva druga trecva cetvrta";
 
 	//char* novi = noviString1(str);
 	//printf("%s", novi);
@@ -198,6 +199,10 @@ int main() {
 	//printf("%s", novi);
 	//free(novi);
 
+	char* novi = noviString4(str);
+	printf("%s", novi);
+	free(novi);
+
 
 
 	/*char** novi = podijeli(str);
@@ -207,22 +212,6 @@ int main() {
 	free(novi[0]);
 	free(novi[1]);
 	free(novi);*/
-
-
-
-	Tocka niz[] = { { 1.0, 2.0 }, { 2.0, 2.0 }, { 3.0, 2.0 }, { 3.0, 2.0 }, { 1.0, 2.0 } };
-	int duljina = sizeof(niz) / sizeof(niz[0]);
-
-	//Tocka* novi = dodaj(niz, duljina);
-	//for (int i = 0; i < duljina + 1; i++) printf("(%.1f, %.1f)\n", novi[i].x, novi[i].y);
-	//free(novi);
-
-	int duljinaN;
-	Tocka* novi = izbrisi(niz, duljina, &duljinaN);
-	for (int i = 0; i < duljinaN;i++) {
-		printf("(%.1f, %.1f)\n", novi[i].x, novi[i].y);
-	}
-	free(novi);
 
 	return 0;
 }
